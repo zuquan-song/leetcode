@@ -1,16 +1,32 @@
-import heapq
-
+import random
 class Solution:
-    def kClosest(self, points, K: int):
-        def getDist(point):
-            return - (point[0] ** 2 + point[1] ** 2)
+    def kClosest(self, points, K):
+        distance = lambda i: points[i][0] ** 2 + points[i][1] ** 2
 
-        res = [(getDist(point), point) for point in points[:K]]
+        def sort(i, j, K):
+            if i >= j: return
+            k = random.randint(i, j)
+            points[i], points[k] = points[k], points[i]
 
-        heapq.heapify(res)
-        print(res)
-        for i in range(K, len(points)):
-            if res[0][0] < getDist(points[i]):
-                heapq.heappop(res)
-                heapq.heappush(res, (getDist(points[i]), points[i]))
-        return [val for _, val in res]
+            mid = partition(i, j)
+            if K < mid - i + 1:
+                sort(i, mid - 1, K)
+            elif K > mid - i + 1:
+                sort(mid + 1, j, K - (mid - i + 1))
+
+        def partition(i, j):
+            oi = i
+            pivot = distance(i)
+            i += 1
+            while True:
+                while i < j and distance(i) < pivot:
+                    i += 1
+                while i <= j and distance(j) >= pivot:
+                    j -= 1
+                if i >= j: break
+                points[i], points[j] = points[j], points[i]
+            points[oi], points[j] = points[j], points[oi]
+            return j
+
+        sort(0, len(points) - 1, K)
+        return points[:K]
