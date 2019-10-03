@@ -13,7 +13,9 @@ class Solution:
 
         n = len(A)
         rotations = check(A[0])
+        # if we cannot find a rotation or A[0] == B[0], the result is rotation
         if rotations != -1 or A[0] == B[0]:
             return rotations
+        # else tells us the rotation is -1 and A[0] != B[0]
         else:
             return check(B[0])
