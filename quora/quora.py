@@ -1,3 +1,4 @@
+import collections
 
 def goodTuple(array):
     result = 0
